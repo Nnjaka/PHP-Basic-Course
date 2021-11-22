@@ -24,13 +24,13 @@
                     </ul>
                 </div>
                 <div class="our-products-heaing">
-                    <p class="our-products">Our Products Range</p>
+                    <p class="our-products">Single page</p>
                 </div>
             </div>
-            <div class="content">
-                <div class="content-menu clearfix">
+            <div class="single-content">
+                <div class="content-menu">
                     <ul>
-                        <li class="content-menu-list"><a href="" class="content-menu-link content-menu-link-all">All</a></li>
+                        <li class="content-menu-list"><a href="" class="content-menu-link">All</a></li>
                         <li class="content-menu-list"><a href="" class="content-menu-link">HOME</a></li>
                         <li class="content-menu-list"><a href="" class="content-menu-link">OFFICE</a></li>
                         <li class="content-menu-list"><a href="" class="content-menu-link">FURNITURE</a></li>
@@ -38,37 +38,27 @@
                         <li class="content-menu-list"><a href="" class="content-menu-link">CLASSIC</a></li>
                     </ul>
                 </div>
-                <div class="products clearfix">
+                <div class="single-product">
              
                     <?php
+                        $imageID = $_GET['image_id'];
                         $link = mysqli_connect('localhost:3306', 'root', '', 'geekbrains');
                         if($link){
-                            $query = "SELECT img_id, img_address, img_name, img_view_count FROM `images` ORDER BY img_view_count DESC";
+                            $query = "UPDATE images SET img_view_count=img_view_count+1 WHERE img_id=" . $imageID . ";";
+                            mysqli_query($link, $query);
+                            $query = "SELECT img_address, img_name, img_view_count FROM images WHERE img_id=" . $imageID . ";";
                             $result = mysqli_query($link, $query);
-
                             while($row = mysqli_fetch_assoc($result)){
-                                echo "<a target=\"_blanc\" href=\"image.php?image_id=" . $row['img_id'] . '"' . "class=\"product\"><img src=" . $row['img_address'] . $row['img_name'] . ' ' . "class=\"section3-outline\"></a>";
+                                echo "<img src=" . $row['img_address'] . $row['img_name'] . ' ' . "class=\"single-image\"></a>";
+                                echo "<div class= \"wiews \">NUMBER OF WIEWS:<span class=\"count\">" . $row['img_view_count'] . "</span></div>";
                             };
-                            mysqli_close($link);    
+                            mysqli_close($link);  
                         }
                         else{
                             die('Database connection error');
                         };
                     ?>
-                    
-                </div>
-                <a href="catalog.html">
-                    <div class="arrows"> </div>
-                </a>
-                <div class="section2">
-                    <div class="section2-product1 clearfix">
-                        <p class="section2-exclusive">exclusive</p>
-                        <h2 class="section2-heading">Fishnet Chair</h2>
-                        <p class="section2-content">Seat and back with upholstery made of&nbsp;cold cure foam. Steel frame, available in&nbsp;matt</p> <a href="" class="button section2-button">Order Us</a> </div>
-                    <div class="section2-product2">
-                        <p class="section2-exclusive">exclusive</p>
-                        <h2 class="section2-heading">Fishnet Chair</h2>
-                        <p class="section2-content">Seat and back with upholstery made of&nbsp;cold cure foam. Steel frame, available in&nbsp;matt</p> <a href="" class="button section2-button">Order Us</a> </div>
+
                 </div>
             </div>
             <div class="clr"></div>
