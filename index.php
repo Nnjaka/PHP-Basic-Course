@@ -39,7 +39,7 @@
                 </ul>
             </div>
             <div class="products clearfix">
-                
+             
                 <?php
                     $images = [];
                     $dirImgs = scandir('./img/products');
@@ -49,10 +49,10 @@
                         };
                     };
                     foreach($images as $image){
-                        echo "<a target=\"_blanc\" href=\"#\" class=\"product\"><img src=img/products/" .$image . " class=\"section3-outline\"></a>";
+                        echo "<a target=\"_blanc\" href=\"img/products/" . $image ."\" class=\"product\"><img src=img/products/" .$image . " class=\"section3-outline\"></a>";
                     };
                 ?>
-           
+          
            </div>
             <a href="catalog.html">
                 <div class="arrows"> </div>
