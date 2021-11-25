@@ -1,0 +1,47 @@
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  padding: 50px;
+  
+}
+
+form {
+ width: 600px;
+}
+
+.input-data {
+  padding: 50px;
+  display: flex;
+  justify-content: space-around;
+}
+
+input::placeholder {
+  font-size: 10px;
+}
+
+.number-data{
+  width: 110px;
+  height: 30px;
+}
+
+option::disabled {
+  font-size: 10px;
+}
+
+.submit{
+  display: flex;
+  justify-content: center;
+}
+
+.submit-button {
+  height: 40px;
+  width: 200px;
+}
+
+.result {
+  padding: 50px;
+}
