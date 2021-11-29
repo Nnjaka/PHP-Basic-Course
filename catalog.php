@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>Account</title>
+        <title>Catalog</title>
         <link rel="stylesheet" href="style.css">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;500&display=swap" rel="stylesheet"> 
     </head>
@@ -18,30 +18,49 @@
                     </div>
                 </div>
                 <div class="our-products-heaing">
-                    <p class="our-products">Account</p>
+                        <p class="our-products">Catalog</p>
                 </div>
             </div>
             <div class="content">
-                    
-                <?php
-                session_start();
-                if(isset($_SESSION['userID'])){
-                    require_once 'db.php';
-                    global $DBLink;
-                    $query = "SELECT * FROM users WHERE id ='" . $_SESSION['userID'] . "';";
-                    $result = mysqli_fetch_assoc(mysqli_query($DBLink, $query));
-                    echo '<div class="account-email">' . $result['email'] . '</div>';
-                    echo '<div class="account-name">Hello, ' . $result['name'] . '</div>';
-                    echo '<div class="account-button">
-                                <form method="GET" action="/catalog.php">
-                                    <input class="button-catalog" type="submit" value="Catalog">
-                                </form>
-                            </div>';    
-                } else {
-                    header('location: /login.php');
-                };
-                ?>
-            
+                <div class="products clearfix">
+                
+                    <?php
+                        session_start();
+                        if( !isset($_SESSION['cart']) ) { 
+                            $_SESSION['cart'] = [];
+                        };
+                        if(isset($_SESSION['userID'])){
+                            require_once 'db.php';
+                            global $DBLink;
+                            $query = "SELECT i.id, i.address, i.name, i.view_count, p.id, p.title, p.price FROM images AS i JOIN products AS p ON i.id = p.image_id ORDER BY i.view_count DESC;";
+                            $result = mysqli_query($DBLink, $query);
+                            while($row = mysqli_fetch_assoc($result)){
+                                echo "<div class=\"product\"><a target=\"_blanc\" href=\"image.php?image_id=" . $row['id'] . '"' . "class=\"product-image\"><img src=" . $row['address'] . $row['name'] . ' ' . "class=\"section3-outline\"></a>
+                                    <div class=\"product-info\">
+                                        <div class=\"product-title\">$row[title]</div>
+                                        <div class=\"product-price\">$row[price]<span>$</span></div>
+                                    </div>
+                                    <div class=\"cart-button\">
+                                        <form method=\"post\" >
+                                            <input type=\"hidden\" name=\"cartId\" value=\"$row[id]\">
+                                            <input class=\"button-catalog\" type=\"submit\" value=\"Add to cart\">
+                                        </form>
+                                    </div>
+                                </div>";
+                            };
+                            if(!empty($_POST['cartId'])){
+                                $_SESSION['cart'][] = $_POST['cartId'];
+                            }   
+                        }
+                        else{
+                            header('location: /login.php');
+                        };
+                    ?>
+                        
+                </div>
+                <a href="catalog.php">
+                    <div class="arrows"> </div>
+                </a>
             </div>
             <div class="clr"></div>
         </div>

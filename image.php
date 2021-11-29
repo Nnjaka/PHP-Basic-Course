@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>Account</title>
+        <title>Product</title>
         <link rel="stylesheet" href="style.css">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;500&display=swap" rel="stylesheet"> 
     </head>
@@ -18,30 +18,47 @@
                     </div>
                 </div>
                 <div class="our-products-heaing">
-                    <p class="our-products">Account</p>
+                    <p class="our-products">Product</p>
                 </div>
             </div>
-            <div class="content">
-                    
-                <?php
-                session_start();
-                if(isset($_SESSION['userID'])){
-                    require_once 'db.php';
-                    global $DBLink;
-                    $query = "SELECT * FROM users WHERE id ='" . $_SESSION['userID'] . "';";
-                    $result = mysqli_fetch_assoc(mysqli_query($DBLink, $query));
-                    echo '<div class="account-email">' . $result['email'] . '</div>';
-                    echo '<div class="account-name">Hello, ' . $result['name'] . '</div>';
-                    echo '<div class="account-button">
-                                <form method="GET" action="/catalog.php">
-                                    <input class="button-catalog" type="submit" value="Catalog">
-                                </form>
-                            </div>';    
-                } else {
-                    header('location: /login.php');
-                };
-                ?>
-            
+            <div class="single-content">
+                <div class="single-product">
+                
+                    <?php
+                        session_start();
+                        if( !isset($_SESSION['views']) ) { 
+                            $_SESSION['views'] = [];
+                        };
+                        if(isset($_SESSION['userID'])){
+                            $imageID = $_GET['image_id'];
+                            $_SESSION['views'][] = $imageID;
+                            $link = mysqli_connect('localhost:3307', 'root', '', 'geekbrains');
+                            if($link){
+                                $query = "UPDATE images SET view_count=view_count+1 WHERE id=" . $imageID . ";";
+                                mysqli_query($link, $query);
+                                $query = "SELECT address, name, view_count FROM images WHERE id=" . $imageID . ";";
+                                $result = mysqli_query($link, $query);
+                                while($row = mysqli_fetch_assoc($result)){
+                                    echo "<img src=" . $row['address'] . $row['name'] . ' ' . "class=\"single-image\">
+                                            <div class= \"wiews \">COUNT OF WIEWS:<span class=\"count\">" . $row['view_count'] . "</span></div>
+                                            <div class=\"account-button\">
+                                                <form method=\"GET\" action=\"/catalog.php\">
+                                                    <input class=\"button-catalog\" type=\"submit\" value=\"Catalog\">
+                                                </form>
+                                            </div>";
+                                };
+                                if(!empty($_POST['cartId'])){
+                                    $_SESSION['cart'][] = $_POST['cartId'];
+                                };
+                
+                            }
+                            else{
+                                die('Database connection error');
+                            };
+                        };
+                    ?>
+
+                </div>
             </div>
             <div class="clr"></div>
         </div>
