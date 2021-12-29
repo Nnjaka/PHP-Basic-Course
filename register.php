@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>Account</title>
+        <title>Registration</title>
         <link rel="stylesheet" href="style.css">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;500&display=swap" rel="stylesheet"> 
     </head>
@@ -11,37 +11,35 @@
     <body>
         <div class="conteiner">
             <div class="slider padding-site">
-                <div class="header">
+                <div class="header clearfix">
                     <a href="index.html"><img src="img/logo.svg" alt="logo"></a>
-                    <div class="header_cart_link">
-                        <a href="cart.php"><img src="img/cart.png" alt="cart" class="header_cart"></a>
-                    </div>
                 </div>
                 <div class="our-products-heaing">
-                    <p class="our-products">Account</p>
+                    <p class="our-products">Registration</p>
                 </div>
             </div>
             <div class="content">
-                    
-                <?php
-                session_start();
-                if(isset($_SESSION['userID'])){
+                <form class="input-form" method="post" action="/register.php">
+                    <div class="input-block"><p class="input-text">NAME</p><input class="input-field" type="name" name="name"></br></div>
+                    <div class="input-block"><p class="input-text">LOGIN</p><input class="input-field" type="login" name="login"></br></div>
+                    <div class="input-block"><p class="input-text">E-MAIL</p><input class="input-field" type="email" name="email"></br></div>
+                    <div class="input-block"><p class="input-text">PASSWORD</p><input class="input-field" type="password" name="password"></br></div>
+                    <div class="input-block"><input class="input-button" type="submit" value="REGISTER"></div>
+                </form>
+
+                    <?php
                     require_once 'db.php';
-                    global $DBLink;
-                    $query = "SELECT * FROM users WHERE id ='" . $_SESSION['userID'] . "';";
-                    $result = mysqli_fetch_assoc(mysqli_query($DBLink, $query));
-                    echo '<div class="account-email">' . $result['email'] . '</div>';
-                    echo '<div class="account-name">Hello, ' . $result['name'] . '</div>';
-                    echo '<div class="account-button">
-                                <form method="GET" action="/catalog.php">
-                                    <input class="button-catalog" type="submit" value="Catalog">
-                                </form>
-                            </div>';    
-                } else {
-                    header('location: /login.php');
-                };
-                ?>
-            
+                    if(isset($_POST['name'], $_POST['login'], $_POST['email'], $_POST['password'])){
+                        global $DBLink;
+                        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                        $query = "INSERT INTO users SET email='" . $_POST['email'] . "', password='" . $password . "', `name`='" . $_POST['name'] . "', login='" . $_POST['login'] . "';";
+                        mysqli_query($DBLink, $query);
+                        echo '<div class="registration-status">Registration success</div>';
+                        header('location: /login.php');
+                        die();
+                    }
+                    ?>
+           
             </div>
             <div class="clr"></div>
         </div>
